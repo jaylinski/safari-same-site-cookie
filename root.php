@@ -5,7 +5,7 @@ ini_set('error_reporting', E_ALL ^ E_NOTICE);
 session_set_cookie_params([
     'secure' => false, // we are on localhost
     'httponly' => true,
-    'samesite' => 'Strict',
+    'samesite' => 'Lax',
 ]);
 
 session_start();
@@ -26,7 +26,9 @@ if ($_SERVER['REQUEST_URI'] === '/') {
     <br><br>
 <?php
 } else if ($_SERVER['REQUEST_URI'] === '/ad') {
-    $_SESSION['session'] = 'ad';
+    if (!isset($_SESSION['session'])) {
+        $_SESSION['session'] = 'ad';
+    }
 }
 
 echo 'Session: ' . $_SESSION['session'] ?? '';
