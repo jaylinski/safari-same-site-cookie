@@ -1,36 +1,32 @@
 <?php
 
+ini_set('error_reporting', E_ALL ^ E_NOTICE);
+
 session_set_cookie_params([
     'secure' => false, // we are on localhost
     'httponly' => true,
-    'samesite' => 'Lax',
+    'samesite' => 'Strict',
 ]);
 
 session_start();
 
-print_r($_SESSION);
+echo 'First-party frame';
 echo '<br>';
+echo 'Session: ' . $_SESSION['session'] ?? '';
+echo '<br>';
+echo 'Path: ' . $_SERVER['REQUEST_URI'];
+echo '<br><br>';
 
-echo $_SERVER['REQUEST_URI'] . PHP_EOL;
 if ($_SERVER['REQUEST_URI'] === '/') {
     if (!isset($_SESSION['session'])) {
         $_SESSION['session'] = 'root';
     }
-    ?>
-<iframe
-    src="http://ad:2002"
-    title="3rd party ad content"
-    name="" scrolling="no"
-    marginwidth="0" marginheight="0"
-    width="600" height="365"
-    sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation">
-</iframe>
-<br>
+?>
+    <iframe src="http://ad:2002" title="3rd party ad content" width="600" height="200"></iframe>
+    <br><br>
 <?php
 } else if ($_SERVER['REQUEST_URI'] === '/ad') {
     $_SESSION['session'] = 'ad';
 }
 
-print_r($_SESSION);
-
-?>
+echo 'Session: ' . $_SESSION['session'] ?? '';
